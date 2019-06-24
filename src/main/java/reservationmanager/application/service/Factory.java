@@ -1,9 +1,9 @@
 package reservationmanager.application.service;
 
-import reservationmanager.domain.reserve.Reserve;
+import reservationmanager.domain.reservation.Reservation;
 
 public class Factory {
-    public static Reserve reserve(){
-        return new Reserve();
+    public static Reservation reservation(){
+        return new Reservation();
     }
 }
