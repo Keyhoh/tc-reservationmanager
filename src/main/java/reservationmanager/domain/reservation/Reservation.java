@@ -10,7 +10,7 @@ public class Reservation {
     private Lodging lodging;
 
     public Reservation(Guest guest, Room room, Lodging lodging) {
-
+        validateInitializeArguments(guest, room, lodging);
         this.guest = guest;
         this.room = room;
         this.lodging = lodging;
@@ -20,8 +20,8 @@ public class Reservation {
         return lodging.getNumberOfNights() * room.getPrice();
     }
 
-    private void validateReservation(Guest guest,Room room, Lodging lodging){
-        if(!room.allowLodging(lodging)){
+    private void validateInitializeArguments(Guest guest, Room room, Lodging lodging) {
+        if (!room.accommodateGuestsOf(lodging)) {
             throw new IllegalArgumentException("Number of gusts is over");
         }
     }

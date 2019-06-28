@@ -11,16 +11,19 @@ public class Lodging {
     private int numberOfNights;
 
     public Lodging(LocalDate startOn, int numberOfGuests, int numberOfNights) {
-        validateInitializeArguments(startOn, numberOfNights);
+        validateInitializeArguments(startOn, numberOfGuests, numberOfNights);
         this.startOn = startOn;
         this.numberOfGuests = numberOfGuests;
         this.numberOfNights = numberOfNights;
     }
 
-    private void validateInitializeArguments(LocalDate startOn, int numberOfNights) {
+    private void validateInitializeArguments(LocalDate startOn, int numberOfGuests, int numberOfNights) {
         List<String> messageList = new ArrayList<>();
         if (maxNumberOfNightsIsUnder(numberOfNights)) {
             messageList.add(MessageFormat.format("{0} is or under zero or over max number of nights.", numberOfNights));
+        }
+        if(!isPositive(numberOfGuests)){
+            messageList.add("Number of guests must be positive number.");
         }
         if (todayIsAfter(startOn)) {
             messageList.add(MessageFormat.format("{0} is a past date.", startOn));
@@ -33,6 +36,10 @@ public class Lodging {
     private boolean maxNumberOfNightsIsUnder(int numberOfNights) {
         var MAX_NUMBER_OF_NIGHTS = 4;
         return numberOfNights <= 0 || numberOfNights > MAX_NUMBER_OF_NIGHTS;
+    }
+
+    private boolean isPositive(int numberOfGuests){
+        return numberOfGuests > 0;
     }
 
     private boolean todayIsAfter(LocalDate startDate) {
