@@ -5,14 +5,18 @@ import reservationmanager.domain.reservation.ReservationRepository;
 
 import java.util.Collection;
 
-public class Persistence {
+public class ReservationBook {
     private ReservationRepository reservationRepository;
 
-    public int register(Reservation reservation) {
+    public Reservation written(Reservation reservation) {
         return reservationRepository.create(reservation);
     }
 
-    public Collection<Reservation> findAll() {
+    public Collection<Reservation> readAll() {
         return reservationRepository.findAll();
+    }
+
+    public int overwritten(Reservation reservation) {
+        return reservationRepository.update(reservation);
     }
 }

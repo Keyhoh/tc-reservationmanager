@@ -3,6 +3,7 @@ package reservationmanager.domain.reservation;
 import java.util.Collection;
 
 public interface ReservationRepository {
-    int create(Reservation reservation);
+    Reservation create(Reservation reservation);
     Collection<Reservation> findAll();
+    int update(Reservation reservation);
 }
