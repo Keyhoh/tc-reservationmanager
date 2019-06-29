@@ -1,6 +1,5 @@
 package reservationmanager.application.service;
 
-import com.google.common.base.Strings;
 import reservationmanager.domain.guest.Guest;
 import reservationmanager.domain.lodging.Lodging;
 import reservationmanager.domain.reservation.Reservation;
@@ -13,15 +12,17 @@ public class ReservationBuilder {
     private Room room = new Room();
     private Lodging lodging = new Lodging(LocalDate.now().plusDays(1), 2, 1);
 
+    private ReservationBuilder(){}
+
+    public static ReservationBuilder initialize(){
+        return new ReservationBuilder();
+    }
+
     public Reservation build() {
         return new Reservation(guest, room, lodging);
     }
 
     public ReservationBuilder guest(String name, String address, String tel) {
-        // 業務上宿泊客の名前と連絡先は必須（無断キャンセル等）
-        if (Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(tel)) {
-            throw new IllegalArgumentException("name and tel is required.");
-        }
         this.guest = new Guest(name, address, tel);
         return this;
     }
@@ -35,3 +36,5 @@ public class ReservationBuilder {
         return this;
     }
 }
+
+

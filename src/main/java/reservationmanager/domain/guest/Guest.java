@@ -1,5 +1,7 @@
 package reservationmanager.domain.guest;
 
+import com.google.common.base.Strings;
+
 public class Guest {
     private String name;
     private String address;
@@ -9,5 +11,9 @@ public class Guest {
         this.name = name;
         this.address = address;
         this.tel = tel;
+    }
+
+    public boolean isContactable() {
+        return !(Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(tel));
     }
 }

@@ -20,6 +20,10 @@ public class Reservation {
         return lodging.getNumberOfNights() * room.getPrice();
     }
 
+    public boolean isRegistrable(){
+        return guest.isContactable();
+    }
+
     private void validateInitializeArguments(Guest guest, Room room, Lodging lodging) {
         if (!room.accommodateGuestsOf(lodging)) {
             throw new IllegalArgumentException("Number of gusts is over");

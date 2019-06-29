@@ -9,6 +9,9 @@ public class ReservationBook {
     private ReservationRepository reservationRepository;
 
     public Reservation written(Reservation reservation) {
+        if(!reservation.isRegistrable()){
+            throw new IllegalStateException("Guest is not contactable");
+        }
         return reservationRepository.create(reservation);
     }
 
