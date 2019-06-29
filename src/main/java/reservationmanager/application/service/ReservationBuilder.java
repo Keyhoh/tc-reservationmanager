@@ -7,7 +7,7 @@ import reservationmanager.domain.room.Room;
 
 import java.time.LocalDate;
 
-public class Factory {
+public class ReservationBuilder {
     private Guest guest = new Guest("", "", "");
     private Room room = new Room();
     private Lodging lodging = new Lodging(LocalDate.now().plusDays(1), 2, 1);
@@ -16,12 +16,12 @@ public class Factory {
         return new Reservation(guest, room, lodging);
     }
 
-    public Factory guest(Guest guest){
+    public ReservationBuilder guest(Guest guest){
         this.guest = guest;
         return this;
     }
 
-    public Factory lodging(Lodging lodging){
+    public ReservationBuilder lodging(Lodging lodging){
         this.lodging = lodging;
         return this;
     }
