@@ -1,5 +1,7 @@
 package reservationmanager.domain.lodging;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,14 +12,14 @@ public class Lodging {
     private int numberOfGuests;
     private int numberOfNights;
 
-    public Lodging(LocalDate startOn, int numberOfGuests, int numberOfNights) {
+    public Lodging(@NotNull LocalDate startOn, int numberOfGuests, int numberOfNights) {
         validateInitializeArguments(startOn, numberOfGuests, numberOfNights);
         this.startOn = startOn;
         this.numberOfGuests = numberOfGuests;
         this.numberOfNights = numberOfNights;
     }
 
-    private void validateInitializeArguments(LocalDate startOn, int numberOfGuests, int numberOfNights) {
+    private void validateInitializeArguments(@NotNull LocalDate startOn, int numberOfGuests, int numberOfNights) {
         List<String> messageList = new ArrayList<>();
         if (maxNumberOfNightsIsUnder(numberOfNights)) {
             messageList.add(MessageFormat.format("{0} is or under zero or over max number of nights.", numberOfNights));
@@ -52,5 +54,25 @@ public class Lodging {
 
     public int getNumberOfNights() {
         return numberOfNights;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lodging lodging = (Lodging) o;
+
+        if (numberOfGuests != lodging.numberOfGuests) return false;
+        if (numberOfNights != lodging.numberOfNights) return false;
+        return startOn.equals(lodging.startOn);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startOn.hashCode();
+        result = 31 * result + numberOfGuests;
+        result = 31 * result + numberOfNights;
+        return result;
     }
 }
