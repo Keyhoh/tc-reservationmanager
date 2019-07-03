@@ -2,10 +2,7 @@ package reservationmanager.domain.lodging;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Lodging {
     private LocalDate startOn;
@@ -20,18 +17,8 @@ public class Lodging {
     }
 
     private void validateInitializeArguments(@NotNull LocalDate startOn, int numberOfGuests, int numberOfNights) {
-        List<String> messageList = new ArrayList<>();
-        if (maxNumberOfNightsIsUnder(numberOfNights)) {
-            messageList.add(MessageFormat.format("{0} is or under zero or over max number of nights.", numberOfNights));
-        }
-        if(!isPositive(numberOfGuests)){
-            messageList.add("Number of guests must be positive number.");
-        }
-        if (todayIsAfter(startOn)) {
-            messageList.add(MessageFormat.format("{0} is a past date.", startOn));
-        }
-        if (!messageList.isEmpty()) {
-            throw new IllegalArgumentException(String.join(System.lineSeparator(), messageList));
+        if (maxNumberOfNightsIsUnder(numberOfNights) || !isPositive(numberOfGuests) || todayIsAfter(startOn)) {
+            throw new IllegalArgumentException("Impossible lodging");
         }
     }
 
@@ -40,7 +27,7 @@ public class Lodging {
         return numberOfNights <= 0 || numberOfNights > MAX_NUMBER_OF_NIGHTS;
     }
 
-    private boolean isPositive(int numberOfGuests){
+    private boolean isPositive(int numberOfGuests) {
         return numberOfGuests > 0;
     }
 
