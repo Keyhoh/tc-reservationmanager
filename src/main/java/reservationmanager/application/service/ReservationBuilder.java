@@ -24,7 +24,7 @@ public class ReservationBuilder {
         if (guest.isContactable()) {
             return new Reservation(guest, room, lodging);
         }
-        throw new IllegalArgumentException("Guest is not contactable.");
+        throw new IllegalStateException("Guest is not contactable.");
     }
 
     public Reservation buildWithUnnamedGuest() {

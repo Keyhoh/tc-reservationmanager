@@ -26,7 +26,7 @@ class ReservationBuilderTests {
     private Lodging defaultLodging = new Lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights);
 
     @Test
-    void buildDefaultReservation() {
+    void buildCorrectReservation() {
 
         assertEquals(ReservationBuilder.initialize().buildWithUnnamedGuest()
                 , new Reservation(unnamedGuest, defaultRoom, defaultLodging)
@@ -91,11 +91,24 @@ class ReservationBuilderTests {
         var address = "guest address";
         var tel = "guest tel";
 
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest("", "", "").build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, "", "").build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest("", "", tel).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest("", "").build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest("", tel).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest("", address, "").build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, null, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, address, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null, tel).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, address, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, address, tel).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, null).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, tel).build());
+
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "", "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, "", "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", address, "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "", tel).build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, address, "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", address, tel).build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, "").build());
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", tel).build());
     }
 }
