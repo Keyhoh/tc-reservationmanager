@@ -8,6 +8,10 @@ import java.util.Collection;
 public class ReservationBook {
     private ReservationRepository reservationRepository;
 
+    public ReservationBook(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
+    }
+
     public Reservation written(Reservation reservation) {
         if (reservation.isRegistrable()) {
             return reservationRepository.create(reservation);
