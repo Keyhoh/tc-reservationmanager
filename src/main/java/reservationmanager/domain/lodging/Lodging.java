@@ -1,6 +1,7 @@
 package reservationmanager.domain.lodging;
 
 import org.jetbrains.annotations.NotNull;
+import reservationmanager.domain.room.Room;
 
 import java.time.LocalDate;
 
@@ -8,6 +9,7 @@ public class Lodging {
     private LocalDate startOn;
     private int numberOfGuests;
     private int numberOfNights;
+    private Room room = new Room();
 
     public Lodging(@NotNull LocalDate startOn, int numberOfGuests, int numberOfNights) {
         validateInitializeArguments(startOn, numberOfGuests, numberOfNights);
@@ -17,7 +19,7 @@ public class Lodging {
     }
 
     private void validateInitializeArguments(@NotNull LocalDate startOn, int numberOfGuests, int numberOfNights) {
-        if (maxNumberOfNightsIsUnder(numberOfNights) || !isPositive(numberOfGuests) || todayIsAfter(startOn)) {
+        if (maxNumberOfNightsIsUnder(numberOfNights) || !canStay(numberOfGuests) || todayIsAfter(startOn)) {
             throw new IllegalArgumentException("Impossible lodging");
         }
     }
@@ -27,8 +29,8 @@ public class Lodging {
         return numberOfNights <= 0 || numberOfNights > MAX_NUMBER_OF_NIGHTS;
     }
 
-    private boolean isPositive(int numberOfGuests) {
-        return numberOfGuests > 0;
+    private boolean canStay(int numberOfGuests) {
+        return numberOfGuests > 0 && room.accommodateGuestsOf(numberOfGuests);
     }
 
     private boolean todayIsAfter(LocalDate startDate) {
@@ -39,8 +41,8 @@ public class Lodging {
         return numberOfGuests;
     }
 
-    public int getNumberOfNights() {
-        return numberOfNights;
+    public int getPrice(){
+        return numberOfNights * room.getPrice();
     }
 
     @Override

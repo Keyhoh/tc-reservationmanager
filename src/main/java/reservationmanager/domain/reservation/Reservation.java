@@ -3,32 +3,22 @@ package reservationmanager.domain.reservation;
 import org.jetbrains.annotations.NotNull;
 import reservationmanager.domain.guest.Guest;
 import reservationmanager.domain.lodging.Lodging;
-import reservationmanager.domain.room.Room;
 
 public class Reservation {
     private Guest guest;
-    private Room room;
     private Lodging lodging;
 
-    public Reservation(@NotNull Guest guest,@NotNull Room room,@NotNull Lodging lodging) {
-        validateInitializeArguments(guest, room, lodging);
+    public Reservation(@NotNull Guest guest, @NotNull Lodging lodging) {
         this.guest = guest;
-        this.room = room;
         this.lodging = lodging;
     }
 
     public int getPrice() {
-        return lodging.getNumberOfNights() * room.getPrice();
+        return lodging.getPrice();
     }
 
-    public boolean isRegistrable(){
+    public boolean isRegistrable() {
         return guest.isContactable();
-    }
-
-    private void validateInitializeArguments(@NotNull Guest guest,@NotNull Room room,@NotNull Lodging lodging) {
-        if (!room.accommodateGuestsOf(lodging)) {
-            throw new IllegalArgumentException("Number of gusts is over");
-        }
     }
 
     @Override
@@ -45,7 +35,6 @@ public class Reservation {
     @Override
     public int hashCode() {
         int result = guest.hashCode();
-        result = 31 * result + room.hashCode();
         result = 31 * result + lodging.hashCode();
         return result;
     }

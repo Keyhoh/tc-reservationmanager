@@ -7,7 +7,6 @@ import reservationmanager.application.service.ReservationBuilder;
 import reservationmanager.domain.guest.Guest;
 import reservationmanager.domain.lodging.Lodging;
 import reservationmanager.domain.reservation.Reservation;
-import reservationmanager.domain.room.Room;
 
 import java.time.LocalDate;
 
@@ -18,8 +17,6 @@ class ReservationBuilderTests {
 
     private Guest unnamedGuest = new Guest("", "", "");
 
-    private Room defaultRoom = new Room();
-
     private LocalDate defaultLodgingStartOn = LocalDate.now().plusDays(1);
     private int defaultLodgingNumberOfGuests = 2;
     private int defaultLodgingNumberOfNights = 1;
@@ -29,7 +26,7 @@ class ReservationBuilderTests {
     void buildCorrectReservation() {
 
         assertEquals(ReservationBuilder.initialize().buildWithUnnamedGuest()
-                , new Reservation(unnamedGuest, defaultRoom, defaultLodging)
+                , new Reservation(unnamedGuest, defaultLodging)
         );
 
         var name = "guest name";
@@ -40,14 +37,14 @@ class ReservationBuilderTests {
                         .guest(name, address, tel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
                         .build()
-                , new Reservation(new Guest(name, address, tel), defaultRoom, defaultLodging)
+                , new Reservation(new Guest(name, address, tel), defaultLodging)
         );
 
         assertEquals(ReservationBuilder.initialize()
                         .guest(name, tel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
                         .build()
-                , new Reservation(new Guest(name, "", tel), defaultRoom, defaultLodging)
+                , new Reservation(new Guest(name, "", tel), defaultLodging)
         );
     }
 
@@ -62,13 +59,13 @@ class ReservationBuilderTests {
                         .guest(name, address, tel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
                         .build()
-                , new Reservation(new Guest(name, address, tel), defaultRoom, defaultLodging));
+                , new Reservation(new Guest(name, address, tel), defaultLodging));
 
         assertEquals(ReservationBuilder.initialize()
                         .guest(name, tel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
                         .build()
-                , new Reservation(new Guest(name, "", tel), defaultRoom, defaultLodging));
+                , new Reservation(new Guest(name, "", tel), defaultLodging));
     }
 
     @ParameterizedTest
@@ -80,7 +77,7 @@ class ReservationBuilderTests {
         assertEquals(ReservationBuilder.initialize()
                         .lodging(startOn, numberOfGuests, numberOfNights)
                         .buildWithUnnamedGuest()
-                , new Reservation(unnamedGuest, defaultRoom, new Lodging(startOn, numberOfGuests, numberOfNights))
+                , new Reservation(unnamedGuest, new Lodging(startOn, numberOfGuests, numberOfNights))
         );
     }
 
@@ -115,14 +112,14 @@ class ReservationBuilderTests {
     @Test
     void throwsIllegalExceptionByIllegalLodging() {
         var yesterday = LocalDate.now().minusDays(1);
-        assertThrows(IllegalArgumentException.class, ()-> ReservationBuilder.initialize().lodging(yesterday, defaultLodgingNumberOfGuests,defaultLodgingNumberOfNights).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(yesterday, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 0, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 0).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 5).build());
     }
 
     @Test
-    void throwsIllegalExceptionByIllegalReservation(){
-        assertThrows(IllegalStateException.class, ()->ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 3,defaultLodgingNumberOfNights).build());
+    void throwsIllegalExceptionByIllegalReservation() {
+        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 3, defaultLodgingNumberOfNights).build());
     }
 }
