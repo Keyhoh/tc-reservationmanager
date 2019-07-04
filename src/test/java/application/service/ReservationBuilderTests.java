@@ -114,12 +114,8 @@ class ReservationBuilderTests {
         var yesterday = LocalDate.now().minusDays(1);
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(yesterday, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 0, defaultLodgingNumberOfNights).build());
+        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 3, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 0).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 5).build());
-    }
-
-    @Test
-    void throwsIllegalExceptionByIllegalReservation() {
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 3, defaultLodgingNumberOfNights).build());
     }
 }
