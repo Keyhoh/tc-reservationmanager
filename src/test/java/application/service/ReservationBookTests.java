@@ -16,13 +16,13 @@ class ReservationBookTests {
 
     @Test
     void throwsIllegalExceptionByIllegalReservation() {
-        var unnamedGuestReservation = ReservationBuilder.initialize().buildWithUnnamedGuest();
+        var unnamedGuestReservation = ReservationBuilder.initialize().build();
         assertThrows(IllegalStateException.class, () -> reservationBook.written(unnamedGuestReservation));
     }
 
     @Test
     void writeReservationCorrectly() {
-        var reservationWithDefaultLodging = ReservationBuilder.initialize().guest("guest name", "guest tel").build();
+        var reservationWithDefaultLodging = ReservationBuilder.initialize().guest("guest name", "guest tel").buildWithContactableGuest();
 
         when(reservationRepository.create(reservationWithDefaultLodging)).thenReturn(reservationWithDefaultLodging);
 

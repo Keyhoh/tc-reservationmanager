@@ -1,6 +1,7 @@
 package application.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import reservationmanager.application.service.ReservationBuilder;
@@ -17,55 +18,58 @@ class ReservationBuilderTests {
 
     private Guest unnamedGuest = new Guest("", "", "");
 
+    private String guestName = "guest name";
+    private String guestAddress = "guest address";
+    private String guestTel = "guest tel";
+
+    private Guest contactableGuestWithAddress = new Guest(guestName, guestAddress, guestTel);
+    private Guest contactableGuestWithoutAddress = new Guest(guestName, "", guestTel);
+
     private LocalDate defaultLodgingStartOn = LocalDate.now().plusDays(1);
     private int defaultLodgingNumberOfGuests = 2;
     private int defaultLodgingNumberOfNights = 1;
+
     private Lodging defaultLodging = new Lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights);
 
     @Test
     void buildCorrectReservation() {
 
-        assertEquals(ReservationBuilder.initialize().buildWithUnnamedGuest()
+        assertEquals(ReservationBuilder.initialize().build()
                 , new Reservation(unnamedGuest, defaultLodging)
         );
 
-        var name = "guest name";
-        var address = "guest name";
-        var tel = "guest tel";
-
         assertEquals(ReservationBuilder.initialize()
-                        .guest(name, address, tel)
+                        .guest(guestName, guestAddress, guestTel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
-                        .build()
-                , new Reservation(new Guest(name, address, tel), defaultLodging)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithAddress, defaultLodging)
         );
 
         assertEquals(ReservationBuilder.initialize()
-                        .guest(name, tel)
+                        .guest(guestName, guestTel)
                         .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
-                        .build()
-                , new Reservation(new Guest(name, "", tel), defaultLodging)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithoutAddress, defaultLodging)
         );
     }
 
     @Test
     void buildCorrectReservationFromAGuest() {
 
-        var name = "guest name";
-        var address = "guest address";
-        var tel = "guest tel";
+        assertEquals(ReservationBuilder.initialize()
+                        .guest(guestName, guestAddress, guestTel)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithAddress, defaultLodging));
 
         assertEquals(ReservationBuilder.initialize()
-                        .guest(name, address, tel)
-                        .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
-                        .build()
-                , new Reservation(new Guest(name, address, tel), defaultLodging));
+                        .guest(guestName, "", guestTel)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithoutAddress, defaultLodging));
 
         assertEquals(ReservationBuilder.initialize()
-                        .guest(name, tel)
-                        .lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights)
-                        .build()
-                , new Reservation(new Guest(name, "", tel), defaultLodging));
+                        .guest(guestName, guestTel)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithoutAddress, defaultLodging));
     }
 
     @ParameterizedTest
@@ -76,37 +80,45 @@ class ReservationBuilderTests {
 
         assertEquals(ReservationBuilder.initialize()
                         .lodging(startOn, numberOfGuests, numberOfNights)
-                        .buildWithUnnamedGuest()
+                        .build()
                 , new Reservation(unnamedGuest, new Lodging(startOn, numberOfGuests, numberOfNights))
+        );
+
+        assertEquals(ReservationBuilder.initialize()
+                        .guest(guestName, guestAddress, guestTel)
+                        .lodging(startOn, numberOfGuests, numberOfNights)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithAddress, new Lodging(startOn, numberOfGuests, numberOfNights))
+        );
+
+        assertEquals(ReservationBuilder.initialize()
+                        .guest(guestName, guestTel)
+                        .lodging(startOn, numberOfGuests, numberOfNights)
+                        .buildWithContactableGuest()
+                , new Reservation(contactableGuestWithoutAddress, new Lodging(startOn, numberOfGuests, numberOfNights))
         );
     }
 
-    @Test
-    void throwsIllegalExceptionByIllegalGuest() {
+    @ParameterizedTest
+    @CsvFileSource(resources = "/application/service/ReservationBuilderTests/throwsIllegalExceptionByIllegalGuestWithAddress.csv", numLinesToSkip = 1)
+    void throwsIllegalExceptionByIllegalGuestWithAddress(String name, String address, String tel) {
+        Executable executable = () -> ReservationBuilder.initialize().guest(name, address, tel).buildWithContactableGuest();
+        if (name == null || address == null || tel == null) {
+            assertThrows(IllegalArgumentException.class, executable);
+        } else {
+            assertThrows(IllegalStateException.class, executable);
+        }
+    }
 
-        var name = "guest name";
-        var address = "guest address";
-        var tel = "guest tel";
-
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, null, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, address, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null, tel).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, address, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, address, tel).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(name, null).build());
-        assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().guest(null, tel).build());
-
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "", "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, "", "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", address, "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "", tel).build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, address, "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", address, tel).build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest(name, "").build());
-        assertThrows(IllegalStateException.class, () -> ReservationBuilder.initialize().guest("", tel).build());
+    @ParameterizedTest
+    @CsvFileSource(resources = "/application/service/ReservationBuilderTests/throwsIllegalExceptionByIllegalGuestWithoutAddress.csv", numLinesToSkip = 1)
+    void throwsIllegalExceptionByIllegalGuestWithoutAddress(String name, String tel) {
+        Executable executable = () -> ReservationBuilder.initialize().guest(name, tel).buildWithContactableGuest();
+        if (name == null || tel == null) {
+            assertThrows(IllegalArgumentException.class, executable);
+        } else {
+            assertThrows(IllegalStateException.class, executable);
+        }
     }
 
     @Test

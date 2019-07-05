@@ -18,14 +18,14 @@ public class ReservationBuilder {
         return new ReservationBuilder();
     }
 
-    public Reservation build() {
+    public Reservation buildWithContactableGuest() {
         if (guest.isContactable()) {
             return new Reservation(guest, lodging);
         }
         throw new IllegalStateException("Guest is not contactable.");
     }
 
-    public Reservation buildWithUnnamedGuest() {
+    public Reservation build() {
         return new Reservation(guest, lodging);
     }
 
