@@ -14,17 +14,25 @@ package "Embedded DB" <<DataBase>>{
   entity "guest" <<T, TRANSACTION_MARK_COLOR>> {
     + id [PK]
     --
+    - name
+    - address
+    - tel
   }
 
   entity "lodging" <<T, TRANSACTION_MARK_COLOR>> {
     + id [PK]
     --
     # room_id [FK]
+    - start_on
+    - number_of_guests
+    - number_of_nights
   }
 
   entity "room" <<M, MASTER_MARK_COLOR>> {
     + id [PK]
     --
+    - price
+    - capacity
   }
 
   reservation }|-do-|| guest
