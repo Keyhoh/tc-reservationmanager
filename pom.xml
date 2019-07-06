@@ -27,11 +27,12 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.4.3.Final</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.28.0</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
@@ -89,14 +90,15 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>5.2.4</version>
                 <configuration>
-                    <url>jdbc:sqlite:./target/db</url>
+                    <url>jdbc:h2:file:./target/db</url>
+                    <user>sa</user>
                 </configuration>
                 <dependencies>
-                    <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+                    <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
                     <dependency>
-                        <groupId>org.flywaydb</groupId>
-                        <artifactId>flyway-core</artifactId>
-                        <version>5.2.4</version>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.199</version>
                     </dependency>
                 </dependencies>
             </plugin>
