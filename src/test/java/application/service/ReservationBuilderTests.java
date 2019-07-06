@@ -126,8 +126,10 @@ class ReservationBuilderTests {
         var yesterday = LocalDate.now().minusDays(1);
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(yesterday, defaultLodgingNumberOfGuests, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 0, defaultLodgingNumberOfNights).build());
+        // capacity of room is two of fixed value by design
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, 3, defaultLodgingNumberOfNights).build());
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 0).build());
+        // max number of nights is four of fixed value by design
         assertThrows(IllegalArgumentException.class, () -> ReservationBuilder.initialize().lodging(defaultLodgingStartOn, defaultLodgingNumberOfGuests, 5).build());
     }
 }
