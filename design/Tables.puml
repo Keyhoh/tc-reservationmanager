@@ -1,0 +1,35 @@
+@startuml
+
+!define MASTER_MARK_COLOR AEB
+!define TRANSACTION_MARK_COLOR FA4
+
+package "Embedded DB" <<DataBase>>{
+  entity "reservation" <<T, TRANSACTION_MARK_COLOR>> {
+    + id [PK]
+    --
+    # guest_id [FK]
+    # lodging_id [FK]
+  }
+
+  entity "guest" <<T, TRANSACTION_MARK_COLOR>> {
+    + id [PK]
+    --
+  }
+
+  entity "lodging" <<T, TRANSACTION_MARK_COLOR>> {
+    + id [PK]
+    --
+    # room_id [FK]
+  }
+
+  entity "room" <<M, MASTER_MARK_COLOR>> {
+    + id [PK]
+    --
+  }
+
+  reservation }|-do-|| guest
+  reservation }|-ri-|| lodging
+  lodging }|-do-|| room
+}
+
+@enduml
