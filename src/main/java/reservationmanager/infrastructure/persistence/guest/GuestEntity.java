@@ -1,4 +1,4 @@
-package reservationmanager.infrastructure.entity.guest;
+package reservationmanager.infrastructure.persistence.guest;
 
 import lombok.Data;
 

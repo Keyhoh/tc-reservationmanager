@@ -1,17 +1,9 @@
-create table room
-(
-    id       uuid primary key,
-    price    int     not null,
-    capacity tinyint not null
-);
-
 create table lodging
 (
     id               uuid primary key,
-    room_id          uuid    not null references room,
     start_on         date    not null,
     number_of_guests tinyint not null,
-    number_of_nights tinyint
+    number_of_nights tinyint not null
 );
 
 create table guest

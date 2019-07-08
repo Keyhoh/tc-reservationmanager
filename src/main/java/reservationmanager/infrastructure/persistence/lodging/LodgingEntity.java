@@ -1,4 +1,4 @@
-package reservationmanager.infrastructure.entity.lodging;
+package reservationmanager.infrastructure.persistence.lodging;
 
 import lombok.Data;
 

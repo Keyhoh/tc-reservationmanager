@@ -1,4 +1,4 @@
-package reservationmanager.infrastructure.entity.room;
+package reservationmanager.infrastructure.persistence.reservation;
 
 import lombok.Data;
 
@@ -8,11 +8,11 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "room")
+@Table(name = "reservation")
 @Data
-public class RoomEntity {
+public class ReservationEntity {
     @Id
     private UUID id;
-    private Integer price;
-    private Integer capacity;
+    private UUID guestId;
+    private UUID lodgingId;
 }
